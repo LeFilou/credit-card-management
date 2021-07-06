@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  credit-card-management:
+    container_name: credit-card-management
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - axon-server
+  axon-server:
+    image: axoniq/axonserver
+    container_name: axon-server
+    environment:
+      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+    ports:
+      - "8024:8024"
+      - '8124:8124'
