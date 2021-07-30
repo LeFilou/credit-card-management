@@ -47,7 +47,8 @@ class CreditCardTest {
         final UUID creditCardId = UUID.randomUUID();
         final BigDecimal initialLimit = new BigDecimal(1500);
         fixture
-            .given(new LimitAssignedEvent(creditCardId, initialLimit))
+            .given(new CreditCardCreatedEvent(creditCardId))
+            .andGiven(new LimitAssignedEvent(creditCardId, initialLimit))
             .when(new AssignLimitCommand(creditCardId, new BigDecimal(2000)))
             .expectException(IllegalArgumentException.class);
     }

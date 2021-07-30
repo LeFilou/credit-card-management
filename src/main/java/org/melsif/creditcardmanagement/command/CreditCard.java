@@ -36,10 +36,14 @@ public class CreditCard {
 
     @CommandHandler
     public void handle(AssignLimitCommand assignLimitCommand) {
-        if (limit != null) {
-            throw new IllegalArgumentException();
+        if (limitAlreadyAssigned()) {
+            throw new IllegalArgumentException("Limit already assigned for credit card : " + id);
         }
         apply(new LimitAssignedEvent(assignLimitCommand.getCreditCardId(), assignLimitCommand.getInitialLimit()));
+    }
+
+    private boolean limitAlreadyAssigned() {
+        return limit != null;
     }
 
     @EventSourcingHandler

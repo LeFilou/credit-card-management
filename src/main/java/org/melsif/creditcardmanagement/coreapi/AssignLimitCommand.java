@@ -1,14 +1,14 @@
 package org.melsif.creditcardmanagement.coreapi;
 
-import lombok.*;
-import org.axonframework.commandhandling.RoutingKey;
+import lombok.Value;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Value
 public class AssignLimitCommand {
-    @RoutingKey
+    @TargetAggregateIdentifier
     UUID creditCardId;
     BigDecimal initialLimit;
 }
