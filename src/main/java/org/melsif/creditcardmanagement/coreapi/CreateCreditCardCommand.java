@@ -1,12 +1,12 @@
 package org.melsif.creditcardmanagement.coreapi;
 
 import lombok.Value;
+import org.axonframework.commandhandling.RoutingKey;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Value
-public class LimitAssignedEvent {
+public class CreateCreditCardCommand {
+    @RoutingKey
     UUID creditCardId;
-    BigDecimal initialAmount;
 }

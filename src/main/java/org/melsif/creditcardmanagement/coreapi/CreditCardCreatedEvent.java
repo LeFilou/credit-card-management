@@ -2,11 +2,9 @@ package org.melsif.creditcardmanagement.coreapi;
 
 import lombok.Value;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Value
-public class LimitAssignedEvent {
+public class CreditCardCreatedEvent {
     UUID creditCardId;
-    BigDecimal initialAmount;
 }
