@@ -48,6 +48,9 @@ public class CreditCard {
 
     @CommandHandler
     public void handle(WithdrawCommand withdrawCommand) {
+        if (!limitAlreadyAssigned()) {
+            throw new IllegalStateException("Cannot withdraw when a limit is not assigned");
+        }
         apply(new WithdrawEvent(withdrawCommand.getCreditCardId(), withdrawCommand.getMoneyWithdrawn()));
     }
 

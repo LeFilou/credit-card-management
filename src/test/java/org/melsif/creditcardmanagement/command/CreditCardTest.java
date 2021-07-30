@@ -64,7 +64,12 @@ class CreditCardTest {
 
     @Test
     void cannot_withdraw_when_a_limit_is_not_assigned() {
-
+        final UUID creditCardId = UUID.randomUUID();
+        final BigDecimal moneyWithdrawn = new BigDecimal(1000);
+        fixture
+            .given(new CreditCardCreatedEvent(creditCardId))
+            .when(new WithdrawCommand(creditCardId, moneyWithdrawn))
+            .expectException(IllegalStateException.class);
     }
 
     @Test
