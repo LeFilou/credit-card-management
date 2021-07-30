@@ -6,10 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.melsif.creditcardmanagement.coreapi.AssignLimitCommand;
-import org.melsif.creditcardmanagement.coreapi.CreateCreditCardCommand;
-import org.melsif.creditcardmanagement.coreapi.CreditCardCreatedEvent;
-import org.melsif.creditcardmanagement.coreapi.LimitAssignedEvent;
+import org.melsif.creditcardmanagement.coreapi.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,6 +15,7 @@ import java.util.UUID;
 class CreditCardTest {
 
     private FixtureConfiguration<CreditCard> fixture;
+    private static final UUID creditCardId = UUID.randomUUID();
 
     @BeforeEach
     void setup() {
@@ -34,7 +32,6 @@ class CreditCardTest {
 
     @Test
     void can_assign_limit() {
-        final UUID creditCardId = UUID.randomUUID();
         final BigDecimal limit = new BigDecimal(1500);
         fixture
             .given(new CreditCardCreatedEvent(creditCardId))
@@ -55,7 +52,14 @@ class CreditCardTest {
 
     @Test
     void can_withdraw() {
-
+        final UUID creditCardId = UUID.randomUUID();
+        final BigDecimal initialLimit = new BigDecimal(1500);
+        final BigDecimal moneyWithdrawn = new BigDecimal(1000);
+        fixture
+            .given(new CreditCardCreatedEvent(creditCardId))
+            .andGiven(new LimitAssignedEvent(creditCardId, initialLimit))
+            .when(new WithdrawCommand(creditCardId, moneyWithdrawn))
+            .expectEvents(new WithdrawEvent(creditCardId, moneyWithdrawn));
     }
 
     @Test
