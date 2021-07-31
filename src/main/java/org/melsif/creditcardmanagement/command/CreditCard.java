@@ -51,6 +51,9 @@ public class CreditCard {
         if (!limitAlreadyAssigned()) {
             throw new IllegalStateException("Cannot withdraw when a limit is not assigned");
         }
+        if (!canWithdraw(withdrawCommand.getMoneyWithdrawn())) {
+            throw new IllegalStateException("Cannot withdraw when there is not enough money");
+        }
         apply(new WithdrawEvent(withdrawCommand.getCreditCardId(), withdrawCommand.getMoneyWithdrawn()));
     }
 
@@ -61,5 +64,11 @@ public class CreditCard {
 
     private boolean limitAlreadyAssigned() {
         return limit != null;
+    }
+
+    private boolean canWithdraw(BigDecimal money) {
+        return limit
+            .subtract(usedLimit)
+            .compareTo(money) >= 0;
     }
 }

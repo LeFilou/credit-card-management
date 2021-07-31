@@ -74,7 +74,13 @@ class CreditCardTest {
 
     @Test
     void cannot_withdraw_when_there_is_not_enough_money() {
-
+        final BigDecimal initialLimit = new BigDecimal(1500);
+        final BigDecimal moneyWithdrawn = new BigDecimal(2000);
+        fixture
+            .given(new CreditCardCreatedEvent(creditCardId))
+            .andGiven(new LimitAssignedEvent(creditCardId, initialLimit))
+            .when(new WithdrawCommand(creditCardId, moneyWithdrawn))
+            .expectException(IllegalStateException.class);
     }
 
     @Test
