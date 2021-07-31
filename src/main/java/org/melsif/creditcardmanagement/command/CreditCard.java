@@ -4,12 +4,14 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.Timestamp;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.melsif.creditcardmanagement.coreapi.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
@@ -58,7 +60,7 @@ public class CreditCard {
     }
 
     @EventHandler
-    public void on(WithdrawEvent withdrawEvent) {
+    public void on(WithdrawEvent withdrawEvent, @Timestamp Instant withdrawTime) {
         this.usedLimit = this.usedLimit.add(withdrawEvent.getMoneyWithdrawn());
     }
 
@@ -67,8 +69,10 @@ public class CreditCard {
     }
 
     private boolean canWithdraw(BigDecimal money) {
-        return limit
-            .subtract(usedLimit)
-            .compareTo(money) >= 0;
+        return availableLimit().compareTo(money) >= 0;
+    }
+
+    private BigDecimal availableLimit() {
+        return limit.subtract(usedLimit);
     }
 }

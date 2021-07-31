@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.melsif.creditcardmanagement.coreapi.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -85,7 +87,15 @@ class CreditCardTest {
 
     @Test
     void cannot_withdraw_when_there_was_withdrawal_within_the_last_hour() {
-
+        final BigDecimal initialLimit = new BigDecimal(3000);
+        final BigDecimal moneyWithdrawn = new BigDecimal(1000);
+        fixture
+            .given(new CreditCardCreatedEvent(creditCardId))
+            .andGiven(new LimitAssignedEvent(creditCardId, initialLimit))
+            .andGivenCurrentTime(Instant.now().minus(30, ChronoUnit.MINUTES))
+            .andGiven(new WithdrawCommand(creditCardId, moneyWithdrawn))
+            .when(new WithdrawCommand(creditCardId, moneyWithdrawn))
+            .expectException(IllegalStateException.class);
     }
 
     @Test
