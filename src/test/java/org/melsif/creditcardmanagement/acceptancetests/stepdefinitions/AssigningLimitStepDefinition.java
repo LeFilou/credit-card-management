@@ -13,7 +13,7 @@ public class AssigningLimitStepDefinition extends BaseIntegrationTest {
 
     @Given("a credit card of id {string} that just have been created")
     public void aCreditCardOfIdThatJustHaveBeenCreated(String creditCardId) {
-
+        int i = 10;
     }
 
     @When("assigning a limit to it")
