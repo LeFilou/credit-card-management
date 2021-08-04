@@ -1,5 +1,5 @@
 Feature: Assigning a limit to a credit card
-  Scenario: Can assign a limit to a newly credit card
-    Given a credit card of id "123456789" that just have been created
-    When assigning a limit to it
-    Then The credit card has a limit
+  Scenario: Can assign a limit
+    Given a new credit card with the id "1234-2258-9873-8991-1111"
+    When assigning a limit of 2000 to it
+    Then The credit card has a limit of 2000

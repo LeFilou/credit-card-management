@@ -8,6 +8,6 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
     features = "src/test/resources/features",
     plugin = {"pretty"},
-    glue = {"org.melsif.creditcardmanagement.acceptancetests.stepdefinitions"}
+    glue = {"org.melsif.creditcardmanagement.acceptancetests.commons"}
 )
 class CucumberTestSuite {}

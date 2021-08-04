@@ -1,10 +1,10 @@
 package org.melsif.creditcardmanagement.acceptancetests;
 
-import io.restassured.RestAssured;
-import org.junit.BeforeClass;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.lifecycle.Startables;
@@ -36,9 +36,9 @@ public abstract class BaseIntegrationTest {
         }
     }
 
-    @BeforeClass
-    public static void setup() {
-        RestAssured.port = 8080;
-        RestAssured.baseURI = "http://localhost";
+    @DynamicPropertySource
+    static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("axon.axonserver.servers",
+            () -> "localhost:" + Initializer.axonServer.getMappedPort(8124));
     }
 }
