@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.melsif.creditcardmanagement.coreapi.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CreditCardTest {
 
     private FixtureConfiguration<CreditCard> fixture;
-    private static final UUID creditCardId = UUID.randomUUID();
+    private static final String creditCardId = "1234-2258-9873-8991";
 
     @BeforeEach
     void setup() {
@@ -24,7 +23,6 @@ class CreditCardTest {
 
     @Test
     void can_create_credit_card() {
-        final UUID creditCardId = UUID.randomUUID();
         fixture.givenNoPriorActivity()
             .when(new CreateCreditCardCommand(creditCardId))
             .expectEvents(new CreditCardCreatedEvent(creditCardId));
@@ -41,7 +39,6 @@ class CreditCardTest {
 
     @Test
     void cannot_assign_limit_when_it_was_already_assigned() {
-        final UUID creditCardId = UUID.randomUUID();
         final BigDecimal initialLimit = new BigDecimal(1500);
         fixture
             .given(new CreditCardCreatedEvent(creditCardId))
@@ -52,7 +49,6 @@ class CreditCardTest {
 
     @Test
     void can_withdraw() {
-        final UUID creditCardId = UUID.randomUUID();
         final BigDecimal initialLimit = new BigDecimal(1500);
         final BigDecimal moneyWithdrawn = new BigDecimal(1000);
         fixture
@@ -64,7 +60,6 @@ class CreditCardTest {
 
     @Test
     void cannot_withdraw_when_a_limit_is_not_assigned() {
-        final UUID creditCardId = UUID.randomUUID();
         final BigDecimal moneyWithdrawn = new BigDecimal(1000);
         fixture
             .given(new CreditCardCreatedEvent(creditCardId))

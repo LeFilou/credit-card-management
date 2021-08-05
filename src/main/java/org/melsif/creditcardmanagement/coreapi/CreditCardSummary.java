@@ -1,32 +1,37 @@
 package org.melsif.creditcardmanagement.coreapi;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static java.math.BigDecimal.ZERO;
 
 @Entity
 @Getter
-public class CreditCardSummary {
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class CreditCardSummary implements Serializable {
 
     @Id
-    private UUID creditCardId;
-    private BigDecimal limit;
+    private String creditCardId;
+    private BigDecimal limitAssigned;
     private BigDecimal usedLimit = ZERO;
 
-    public CreditCardSummary(UUID creditCardId) {
+    public CreditCardSummary(String creditCardId) {
         this.creditCardId = creditCardId;
-        limit = ZERO;
-        usedLimit = ZERO;
+        limitAssigned = ZERO;
     }
 
     public void assignLimit(BigDecimal limit) {
-        this.limit = limit;
+        this.limitAssigned = limit;
     }
 
-    private CreditCardSummary() {} // for hibernate
+    //private CreditCardSummary() {} // for hibernate
 }

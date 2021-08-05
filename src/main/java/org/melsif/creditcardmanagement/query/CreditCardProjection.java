@@ -6,9 +6,11 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.melsif.creditcardmanagement.coreapi.CreditCardCreatedEvent;
 import org.melsif.creditcardmanagement.coreapi.CreditCardSummary;
 import org.melsif.creditcardmanagement.coreapi.LimitAssignedEvent;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 
+@Component
 @RequiredArgsConstructor
 public class CreditCardProjection {
 

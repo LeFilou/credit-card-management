@@ -6,5 +6,5 @@ import java.util.UUID;
 
 @Value
 public class FindCreditCardSummaryQuery {
-    UUID creditCardId;
+    String creditCardId;
 }

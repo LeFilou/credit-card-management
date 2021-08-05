@@ -9,6 +9,7 @@ import org.melsif.creditcardmanagement.acceptancetests.commons.CreditCardHttpCli
 import org.melsif.creditcardmanagement.coreapi.CreditCardSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @CucumberContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class AssigningLimitStepDefinition extends BaseIntegrationTest {
 
     @Autowired
@@ -29,16 +31,16 @@ public class AssigningLimitStepDefinition extends BaseIntegrationTest {
         assertThat(responseCode).isEqualTo(201);
     }
 
-    @When("assigning a limit of {int} to it")
-    public void assigningALimitOfToIt(int limit) {
-        final int responseCode = creditCardHttpClient.assignALimit(creditCardId, limit);
+    @When("assigning a limit of {double} to it")
+    public void assigningALimitOfToIt(double limit) {
+        final int responseCode = creditCardHttpClient.assignALimit(creditCardId, new BigDecimal(limit));
         assertThat(responseCode).isEqualTo(204);
     }
 
-    @Then("The credit card has a limit of {int}")
-    public void theCreditCardHasALimitOf(int limit) {
+    @Then("The credit card has a limit of {double}")
+    public void theCreditCardHasALimitOf(double limit) {
         final CreditCardSummary creditCardSummary = creditCardHttpClient.getCreditCardSummary(creditCardId);
         assertThat(creditCardSummary).isNotNull();
-        assertThat(creditCardSummary.getLimit()).isEqualTo(new BigDecimal(limit));
+        assertThat(creditCardSummary.getLimitAssigned()).isEqualByComparingTo(new BigDecimal(limit));
     }
 }

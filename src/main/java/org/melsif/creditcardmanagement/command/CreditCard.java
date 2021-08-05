@@ -12,7 +12,6 @@ import org.melsif.creditcardmanagement.coreapi.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.UUID;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -21,7 +20,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 public class CreditCard {
 
     @AggregateIdentifier
-    private UUID id;
+    private String id;
     private BigDecimal limit;
     private BigDecimal usedLimit = BigDecimal.ZERO;
 
