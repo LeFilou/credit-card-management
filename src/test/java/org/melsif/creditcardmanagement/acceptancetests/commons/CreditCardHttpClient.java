@@ -1,10 +1,13 @@
 package org.melsif.creditcardmanagement.acceptancetests.commons;
 
 import org.melsif.creditcardmanagement.ui.CreateCreditCardRequest;
+import org.melsif.creditcardmanagement.ui.AssignLimitRequest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.math.BigDecimal;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
@@ -12,18 +15,27 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class CreditCardHttpClient {
 
-    private final String SERVER_URL = "http://localhost";
-
-    private String creditCardEndpoint() {
-        return SERVER_URL + ":" + port + "/credit-cards";
-    }
     @LocalServerPort
     private int port;
+
+    private String creditCardEndpoint() {
+        return "http://localhost" + ":" + port + "/credit-cards";
+    }
     private final RestTemplate restTemplate = new RestTemplate();
 
     public int createNewCreditCard(final String creditCardId) {
         return restTemplate.postForEntity(creditCardEndpoint(),
                 new CreateCreditCardRequest(creditCardId), Void.class)
             .getStatusCodeValue();
+    }
+
+    public int assignALimit(String creditCardId, int limit) {
+        return restTemplate.postForEntity(withdrawEndpoint(creditCardId),
+            new AssignLimitRequest(new BigDecimal(limit)), Void.class)
+            .getStatusCodeValue();
+    }
+
+    private String withdrawEndpoint(String creditCardId) {
+        return creditCardEndpoint() + "/" + creditCardId + "/limit";
     }
 }

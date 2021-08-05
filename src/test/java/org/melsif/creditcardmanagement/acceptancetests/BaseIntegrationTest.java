@@ -13,6 +13,7 @@ import org.testcontainers.utility.DockerImageName;
 import java.util.stream.Stream;
 
 import static org.melsif.creditcardmanagement.acceptancetests.BaseIntegrationTest.Initializer;
+import static org.testcontainers.containers.wait.strategy.Wait.forLogMessage;
 
 @ContextConfiguration(initializers = Initializer.class)
 public abstract class BaseIntegrationTest {
@@ -21,10 +22,11 @@ public abstract class BaseIntegrationTest {
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
+        @SuppressWarnings("rawtypes")
         @Container
         static GenericContainer axonServer = new GenericContainer(DockerImageName.parse(AXON_SERVER_IMAGE))
-            .withExposedPorts(8024)
-            .withEnv("AXONIQ_AXONSERVER_DEVMODE_ENABLED", "true");
+            .withExposedPorts(8024, 8124)
+            .waitingFor(forLogMessage(".*Started AxonServer.*\\n", 1));
 
         private static void startContainers() {
             Startables.deepStart(Stream.of(axonServer)).join();

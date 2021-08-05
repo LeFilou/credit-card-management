@@ -17,15 +17,19 @@ public class AssigningLimitStepDefinition extends BaseIntegrationTest {
 
     @Autowired
     private CreditCardHttpClient creditCardHttpClient;
+    private String creditCardId;
 
     @Given("a new credit card with the id {string}")
     public void anExistingCreditCardWithTheId(String creditCardId) {
+        this.creditCardId = creditCardId;
         final int responseCode = creditCardHttpClient.createNewCreditCard(creditCardId);
         assertThat(responseCode).isEqualTo(201);
     }
 
     @When("assigning a limit of {int} to it")
-    public void assigningALimitOfToIt(int arg0) {
+    public void assigningALimitOfToIt(int limit) {
+        final int responseCode = creditCardHttpClient.assignALimit(creditCardId, limit);
+        assertThat(responseCode).isEqualTo(204);
     }
 
     @Then("The credit card has a limit of {int}")
