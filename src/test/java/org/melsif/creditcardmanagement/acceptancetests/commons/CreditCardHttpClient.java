@@ -2,6 +2,7 @@ package org.melsif.creditcardmanagement.acceptancetests.commons;
 
 import org.melsif.creditcardmanagement.ui.CreateCreditCardRequest;
 import org.melsif.creditcardmanagement.ui.AssignLimitRequest;
+import org.melsif.creditcardmanagement.coreapi.CreditCardSummary;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,5 +38,13 @@ public class CreditCardHttpClient {
 
     private String withdrawEndpoint(String creditCardId) {
         return creditCardEndpoint() + "/" + creditCardId + "/limit";
+    }
+
+    private String getEndpoint(String creditCardId) {
+        return creditCardEndpoint() + "/" + creditCardId;
+    }
+
+    public CreditCardSummary getCreditCardSummary(String creditCardId) {
+        return restTemplate.getForObject(getEndpoint(creditCardId), CreditCardSummary.class);
     }
 }

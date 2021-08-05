@@ -6,8 +6,11 @@ import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.melsif.creditcardmanagement.acceptancetests.BaseIntegrationTest;
 import org.melsif.creditcardmanagement.acceptancetests.commons.CreditCardHttpClient;
+import org.melsif.creditcardmanagement.coreapi.CreditCardSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,6 +36,9 @@ public class AssigningLimitStepDefinition extends BaseIntegrationTest {
     }
 
     @Then("The credit card has a limit of {int}")
-    public void theCreditCardHasALimitOf(int arg0) {
+    public void theCreditCardHasALimitOf(int limit) {
+        final CreditCardSummary creditCardSummary = creditCardHttpClient.getCreditCardSummary(creditCardId);
+        assertThat(creditCardSummary).isNotNull();
+        assertThat(creditCardSummary.getLimit()).isEqualTo(new BigDecimal(limit));
     }
 }
